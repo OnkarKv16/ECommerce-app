@@ -50,7 +50,7 @@ public class UserDAO {
 			
 			if (rs.next()) {
 				User user = new User();
-				user.setUser_id(rs.getInt("id"));
+				user.setUser_id(rs.getInt("user_id"));
 				user.setUsername(rs.getString("username"));
 				user.setPassword(rs.getString("password"));
 				user.setRole(rs.getString("role"));
@@ -79,7 +79,7 @@ public class UserDAO {
 			
 			while (rs.next()) {
 				User user = new User();
-				user.setUser_id(rs.getInt("id"));
+				user.setUser_id(rs.getInt("user_id"));
 				user.setUsername(rs.getString("username"));
 				user.setPassword(rs.getString("password"));
 				user.setRole(rs.getString("role"));
@@ -98,7 +98,7 @@ public class UserDAO {
 		
 	}
 	
-	//admin: view specific user history
+	//admin view specific user history
 	public static User getUserByUsername(String username) {
 		String sql = "SELECT * FROM users WHERE username = ?";
 		
@@ -111,7 +111,7 @@ public class UserDAO {
 			
 			if (rs.next()) {
 				User user = new User();
-				user.setUser_id(rs.getInt("id"));
+				user.setUser_id(rs.getInt("user_id"));
 				user.setUsername(rs.getString("username"));
 				user.setPassword(rs.getString("password"));
 				user.setRole(rs.getString("role"));
@@ -128,6 +128,39 @@ public class UserDAO {
 		}
 		
 		return null;
+	}
+	
+	public static void viewUserPurchaseHistory(int userId) {
+	    String sql = "SELECT p.name, h.quantity, h.purchase_date " +
+	                 "FROM purchase_history h JOIN products p ON h.product_id = p.product_id " +
+	                 "WHERE h.user_id = ?";
+
+	    try (Connection conn = DBConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+	        stmt.setInt(1, userId);
+	        ResultSet rs = stmt.executeQuery();
+
+	        System.out.println("\n Purchase History:");
+	        System.out.println("Product Name       | Quantity | Purchase Date");
+	        System.out.println("---------------------------------------------");
+
+	        boolean hasHistory = false;
+	        while (rs.next()) {
+	            hasHistory = true;
+	            System.out.printf("%-20s | %8d | %s\n",
+	                    rs.getString("name"),
+	                    rs.getInt("quantity"),
+	                    rs.getTimestamp("purchase_date").toString());
+	        }
+
+	        if(!hasHistory) {
+	            System.out.println("No purchase history found for this user.");
+	        }
+
+	    } catch(SQLException e) {
+	        System.out.println("Error fetching purchase history: " + e.getMessage());
+	    }
 	}
 	
 

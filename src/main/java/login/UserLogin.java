@@ -2,8 +2,11 @@ package login;
 
 import java.util.Scanner;
 
+import User.UserCartMenu;
+import admin.AdminMenu;
 import dao.UserDAO;
 import model.User;
+import view.ProductViewer;
 
 public class UserLogin {
 	
@@ -19,8 +22,17 @@ public class UserLogin {
 		User loggedIn = UserDAO.login(username, password);
 		
 		if (loggedIn != null) {
-			System.out.println("Login succesful. welcome, "+ loggedIn.getFirstName());
-			System.out.println("Role: "+loggedIn.getRole());
+		    System.out.println("Login successful. Welcome " + loggedIn.getFirstName());
+		    System.out.println("Role: " + loggedIn.getRole());
+
+		    if (loggedIn.getRole().equalsIgnoreCase("USER")) {
+		        UserCartMenu.showUserMenu(loggedIn, sc);
+		    } else if (loggedIn.getRole().equalsIgnoreCase("ADMIN")) {
+		    	AdminMenu.showAdminMenu(sc);
+		    } else if (loggedIn.getRole().equalsIgnoreCase("GUEST")) {
+		        System.out.println("As a guest, you can only view products.");
+		        ProductViewer.showProductList();
+		    }
 		}else {
 			System.out.println("Invalid choice.");
 		}

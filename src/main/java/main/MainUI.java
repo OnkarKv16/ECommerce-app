@@ -11,20 +11,20 @@ import util.DatabaseInitializer;
 public class MainUI {
 	
 	public static void main(String[] args) {
-		//ensure DB and tables exist
+		//ensure db and tables exist
 		DatabaseInitializer.initialize();
 		
 		Scanner sc = new Scanner(System.in);
 		
 		while(true) {
-			System.out.println("====== Welcome to ECommerce App ======");
+			System.out.println("====== Welcome to ECommerce App======");
 			System.out.println("1. Register");
 			System.out.println("2. Login");
 			System.out.println("3. Exit");
 			System.out.println("Enter choice: ");
 			
 			int choice = sc.nextInt();
-			sc.nextLine(); // clear newline
+			sc.nextLine(); 
 			
 			switch(choice) {
 			
